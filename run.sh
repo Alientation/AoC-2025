@@ -25,11 +25,31 @@ fi
 echo "Compiling $SRC"
 g++ -std=c++20 -O2 -Wall "$SRC" -o "$OUT"
 
+
+# Function to check and fallback input
+get_input() {
+    local TYPE=$1
+    local FILE="day${DAY}/${TYPE}/day${DAY}-p${PART}.txt"
+
+    # If part 2 input is empty or missing, copy part 1 input
+    if [ "$PART" -eq 2 ]; then
+        if [ ! -s "$FILE" ]; then
+            FILE="day${DAY}/${TYPE}/day${DAY}-p1.txt"
+        fi
+    fi
+
+    echo "$FILE"
+}
+
+# Run sample
+SAMPLE_FILE=$(get_input "sample")
 echo "Running sample on day $DAY p$PART"
-./"$OUT" "$PART" < "day${DAY}/sample/day${DAY}-sample-p${PART}.txt"
+./"$OUT" "$PART" < "$SAMPLE_FILE"
 echo ""
 echo ""
 
+# Run test
+TEST_FILE=$(get_input "test")
 echo "Running test on day $DAY p$PART"
-./"$OUT" "$PART" < "day${DAY}/test/day${DAY}-p${PART}.txt"
+./"$OUT" "$PART" < "$TEST_FILE"
 echo ""
