@@ -1,5 +1,6 @@
-#include <iostream>
+#include "../aoc.hpp"
 
+#include <iostream>
 #include <cstring>
 #include <cassert>
 
@@ -9,22 +10,17 @@ void p1 ()
 {
     string line;
 
-    long long tot = 0;
+    unsigned long long tot = 0;
     while (getline(cin, line))
     {
         int largest_val = 0;
-        int largest_before = 0;
+        int largest_digit = 0;
         for (char c : line)
         {
-            int val = largest_before * 10 + (c - '0');
-            if (val > largest_val)
-            {
-                largest_val = val;
-            }
-            if ((c - '0') > largest_before)
-            {
-                largest_before = (c - '0');
-            }
+            const int d = c - '0';
+            const int val = largest_digit * 10 + d;
+            largest_val = max(largest_val, val);
+            largest_digit = max(largest_digit, d);
         }
         tot += largest_val;
     }
@@ -41,31 +37,20 @@ void p2 ()
     {
         unsigned long long dp[line.size () + 1][13] = {0};
 
-
-        for (int i = 0; i < line.length (); i++)
+        for (size_t i = 0; i < line.length (); i++)
         {
             for (int j = 0; j < 12; j++)
             {
-                if (dp[i + 1][j + 1] < dp[i][j] * 10 + line[i] - '0')
-                {
-                    dp[i + 1][j + 1] = dp[i][j] * 10 + line[i] - '0';
-                }
-
-                if (dp[i + 1][j] < dp[i][j])
-                {
-                    dp[i + 1][j] = dp[i][j];
-                }
+                dp[i + 1][j + 1] = max(dp[i + 1][j + 1], dp[i][j] * 10 + line[i] - '0');
+                dp[i + 1][j] = max(dp[i + 1][j], dp[i][j]);
             }
         }
-        unsigned long long max = 0;
-        for (int i = 0; i <= line.length (); i++)
+        unsigned long long largest = 0;
+        for (size_t i = 0; i <= line.length (); i++)
         {
-            if (max < dp[i][12])
-            {
-                max = dp[i][12];
-            }
+            largest = max(largest, dp[i][12]);
         }
-        tot += max;
+        tot += largest;
     }
     cout << tot;
 }
