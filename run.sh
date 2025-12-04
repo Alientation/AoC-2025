@@ -23,7 +23,7 @@ if [ ! -f "$SRC" ]; then
 fi
 
 echo "Compiling $SRC"
-g++ -std=c++20 -O2 -Wall "$SRC" -o "$OUT"
+g++ -std=c++20 -O2 -g -Wall "$SRC" -o "$OUT"
 
 
 # Function to check and fallback input
